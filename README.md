@@ -1,9 +1,3 @@
-Below is a **🔥 recruiter-level GitHub README** for your project.
-It includes **badges, architecture, demo section, folder structure, setup guide, and contribution section** — similar to **top open-source repositories**.
-
-You can **copy this entire file as `README.md`**.
-
----
 
 # 🚍 AI-Based Real-Time Bus Crowd Prediction System
 
