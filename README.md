@@ -340,5 +340,5 @@ If you found this project useful:
 
 ⭐ Star the repository
 🍴 Fork the project
-📢 Share it with others
+📢 Share it with others.
 
