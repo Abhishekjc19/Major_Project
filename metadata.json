@@ -1,0 +1,5 @@
+{
+  "name": "OmniBus - Real-time Occupancy Tracker",
+  "description": "A smart bus occupancy tracking system that uses real-time ticket data to predict and display seat availability for passengers.",
+  "requestFramePermissions": ["geolocation"]
+}
