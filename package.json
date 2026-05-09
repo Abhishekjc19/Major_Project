@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "tsx server.ts",
     "build": "cd frontend && npm run build",
-    "preview": "vite preview",
-    "clean": "rm -rf dist",
+    "preview": "cd frontend && vite preview",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
