@@ -4,18 +4,6 @@
   "outputDirectory": "frontend/dist",
   "installCommand": "npm install && cd backend && npm install && cd ..",
   "env": {
-    "VITE_BACKEND_URL": "@vite_backend_url",
-    "VITE_SOCKET_URL": "@vite_socket_url",
-    "DATABASE_TYPE": "@database_type",
-    "SUPABASE_URL": "@supabase_url",
-    "SUPABASE_ANON_KEY": "@supabase_anon_key",
-    "SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_role_key",
-    "JWT_SECRET": "@jwt_secret",
     "NODE_ENV": "production"
-  },
-  "functions": {
-    "backend/src/**/*.ts": {
-      "runtime": "nodejs18.x"
-    }
   }
 }
