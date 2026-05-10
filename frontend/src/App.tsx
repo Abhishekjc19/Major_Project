@@ -667,22 +667,6 @@ export default function App() {
               >
                 {isLoading ? 'Signing in...' : 'Sign In'}
               </button>
-
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-slate-200"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-slate-500">Demo Credentials</span>
-                </div>
-              </div>
-
-              <div className="bg-blue-50 p-4 rounded-xl text-xs text-slate-600 space-y-2">
-                <p><strong>Passenger:</strong></p>
-                <p>Email: passenger@demo.com<br/>Password: demo123</p>
-                <p className="mt-3"><strong>Conductor:</strong></p>
-                <p>Email: conductor@demo.com<br/>Password: demo123</p>
-              </div>
             </div>
           </div>
         </div>

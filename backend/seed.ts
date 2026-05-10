@@ -29,34 +29,8 @@ async function seedDatabase() {
       console.log('(No existing data to clear)');
     }
 
-    // Create demo users
-    console.log('Creating demo users...');
-    const passengerPassword = await authUtils.hashPassword('demo123');
-    const conductorPassword = await authUtils.hashPassword('demo123');
-
-    const passenger = userRepo.create({
-      email: 'passenger@demo.com',
-      password_hash: passengerPassword,
-      name: 'Demo Passenger',
-      role: 'passenger',
-    });
-
-    const conductor = userRepo.create({
-      email: 'conductor@demo.com',
-      password_hash: conductorPassword,
-      name: 'Demo Conductor',
-      role: 'conductor',
-    });
-
-    const admin = userRepo.create({
-      email: 'admin@demo.com',
-      password_hash: conductorPassword,
-      name: 'Admin User',
-      role: 'admin',
-    });
-
-    await userRepo.save([passenger, conductor, admin]);
-    console.log('✓ Demo users created');
+    // Demo users creation disabled - use signup to create new users
+    console.log('Skipping demo user creation');
 
     // Create bus stops
     console.log('Creating bus stops...');
@@ -180,10 +154,6 @@ async function seedDatabase() {
     console.log('✓ Buses and routes created');
 
     console.log('\n✅ Database seeded successfully!');
-    console.log('\nDemo Credentials:');
-    console.log('Passenger: passenger@demo.com / demo123');
-    console.log('Conductor: conductor@demo.com / demo123');
-    console.log('Admin: admin@demo.com / demo123');
 
     await AppDataSource.destroy();
   } catch (error) {
