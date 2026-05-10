@@ -26,8 +26,14 @@ interface AuthUser {
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const [isSignUp, setIsSignUp] = useState(false);
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [signUpName, setSignUpName] = useState('');
+  const [signUpEmail, setSignUpEmail] = useState('');
+  const [signUpPassword, setSignUpPassword] = useState('');
+  const [signUpConfirmPassword, setSignUpConfirmPassword] = useState('');
+  const [signUpRole, setSignUpRole] = useState<'passenger' | 'conductor'>('passenger');
   const [isLoading, setIsLoading] = useState(false);
   const [buses, setBuses] = useState<Bus[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -157,6 +163,49 @@ export default function App() {
       initializeSocket(data.token);
     } catch (error: any) {
       alert('Login failed: ' + error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle sign up
+  const handleSignUp = async () => {
+    if (signUpPassword !== signUpConfirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    if (!signUpName || !signUpEmail || !signUpPassword) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${BACKEND_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          name: signUpName,
+          email: signUpEmail, 
+          password: signUpPassword,
+          role: signUpRole
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Sign up failed');
+      }
+
+      const data = await response.json();
+      alert('Account created successfully! Please sign in.');
+      setIsSignUp(false);
+      setSignUpName('');
+      setSignUpEmail('');
+      setSignUpPassword('');
+      setSignUpConfirmPassword('');
+    } catch (error: any) {
+      alert('Sign up failed: ' + error.message);
     } finally {
       setIsLoading(false);
     }
@@ -636,37 +685,145 @@ export default function App() {
             </div>
 
             <div className="bg-white rounded-3xl p-8 shadow-2xl space-y-6">
-              <div>
-                <label className="block text-sm font-bold text-slate-600 mb-2">Email</label>
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={loginEmail}
-                  onChange={(e) => setLoginEmail(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-                  className="w-full px-4 py-3 bg-slate-100 border-none rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-primary/20"
-                />
-              </div>
+              {!isSignUp ? (
+                <>
+                  {/* Sign In Form */}
+                  <h2 className="text-2xl font-bold text-slate-900 text-center mb-6">Sign In</h2>
+                  
+                  <div>
+                    <label className="block text-sm font-bold text-slate-600 mb-2">Email</label>
+                    <input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={loginEmail}
+                      onChange={(e) => setLoginEmail(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+                      className="w-full px-4 py-3 bg-slate-100 border-none rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-primary/20"
+                    />
+                  </div>
 
-              <div>
-                <label className="block text-sm font-bold text-slate-600 mb-2">Password</label>
-                <input
-                  type="password"
-                  placeholder="••••••••"
-                  value={loginPassword}
-                  onChange={(e) => setLoginPassword(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-                  className="w-full px-4 py-3 bg-slate-100 border-none rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-primary/20"
-                />
-              </div>
+                  <div>
+                    <label className="block text-sm font-bold text-slate-600 mb-2">Password</label>
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+                      className="w-full px-4 py-3 bg-slate-100 border-none rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-primary/20"
+                    />
+                  </div>
 
-              <button
-                onClick={handleLogin}
-                disabled={isLoading}
-                className="w-full py-3 bg-brand-primary text-white rounded-xl font-bold hover:bg-blue-700 transition-colors disabled:opacity-50"
-              >
-                {isLoading ? 'Signing in...' : 'Sign In'}
-              </button>
+                  <button
+                    onClick={handleLogin}
+                    disabled={isLoading}
+                    className="w-full py-3 bg-brand-primary text-white rounded-xl font-bold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  >
+                    {isLoading ? 'Signing in...' : 'Sign In'}
+                  </button>
+
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-slate-200"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-2 bg-white text-slate-500">New to OmniBus?</span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setIsSignUp(true)}
+                    className="w-full py-3 bg-slate-100 text-slate-900 rounded-xl font-bold hover:bg-slate-200 transition-colors"
+                  >
+                    Create Account
+                  </button>
+                </>
+              ) : (
+                <>
+                  {/* Sign Up Form */}
+                  <h2 className="text-2xl font-bold text-slate-900 text-center mb-6">Create Account</h2>
+                  
+                  <div>
+                    <label className="block text-sm font-bold text-slate-600 mb-2">Full Name</label>
+                    <input
+                      type="text"
+                      placeholder="John Doe"
+                      value={signUpName}
+                      onChange={(e) => setSignUpName(e.target.value)}
+                      className="w-full px-4 py-3 bg-slate-100 border-none rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-primary/20"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-slate-600 mb-2">Email</label>
+                    <input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={signUpEmail}
+                      onChange={(e) => setSignUpEmail(e.target.value)}
+                      className="w-full px-4 py-3 bg-slate-100 border-none rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-primary/20"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-slate-600 mb-2">Role</label>
+                    <select
+                      value={signUpRole}
+                      onChange={(e) => setSignUpRole(e.target.value as 'passenger' | 'conductor')}
+                      className="w-full px-4 py-3 bg-slate-100 border-none rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-primary/20"
+                    >
+                      <option value="passenger">Passenger</option>
+                      <option value="conductor">Conductor</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-slate-600 mb-2">Password</label>
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      value={signUpPassword}
+                      onChange={(e) => setSignUpPassword(e.target.value)}
+                      className="w-full px-4 py-3 bg-slate-100 border-none rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-primary/20"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-slate-600 mb-2">Confirm Password</label>
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      value={signUpConfirmPassword}
+                      onChange={(e) => setSignUpConfirmPassword(e.target.value)}
+                      className="w-full px-4 py-3 bg-slate-100 border-none rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-primary/20"
+                    />
+                  </div>
+
+                  <button
+                    onClick={handleSignUp}
+                    disabled={isLoading}
+                    className="w-full py-3 bg-brand-primary text-white rounded-xl font-bold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  >
+                    {isLoading ? 'Creating account...' : 'Create Account'}
+                  </button>
+
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-slate-200"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-2 bg-white text-slate-500">Already have an account?</span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setIsSignUp(false)}
+                    className="w-full py-3 bg-slate-100 text-slate-900 rounded-xl font-bold hover:bg-slate-200 transition-colors"
+                  >
+                    Sign In
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
