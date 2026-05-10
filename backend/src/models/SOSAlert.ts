@@ -39,6 +39,6 @@ export class SOSAlert {
   @CreateDateColumn()
   created_at: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   resolved_at: Date;
 }
