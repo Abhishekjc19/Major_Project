@@ -8,9 +8,45 @@ import { BusCard } from './components/BusCard';
 import { BusDetails } from './components/BusDetails';
 import { cn } from './lib/utils';
 
-// Backend URLs from environment
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001';
+// Backend URLs from environment. In production, prefer same-origin Vercel API
+// functions so the app never falls back to localhost after deployment.
+const normalizeApiUrl = (url: string) => {
+  const trimmed = url.replace(/\/+$/, '');
+  return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;
+};
+
+const getBackendUrl = () => {
+  const configuredUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_BACKEND_URL;
+  if (configuredUrl) return normalizeApiUrl(configuredUrl);
+
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return `${window.location.origin}/api`;
+  }
+
+  return 'http://localhost:3001/api';
+};
+
+const getSocketUrl = () => {
+  if (import.meta.env.VITE_SOCKET_URL) return import.meta.env.VITE_SOCKET_URL.replace(/\/+$/, '');
+
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return window.location.origin;
+  }
+
+  return 'http://localhost:3001';
+};
+
+const BACKEND_URL = getBackendUrl();
+const SOCKET_URL = getSocketUrl();
+
+const getApiErrorMessage = async (response: Response, fallback: string) => {
+  try {
+    const data = await response.json();
+    return data?.error || fallback;
+  } catch {
+    return fallback;
+  }
+};
 
 let socket: Socket | null = null;
 
@@ -146,7 +182,7 @@ export default function App() {
       });
 
       if (!response.ok) {
-        throw new Error('Login failed');
+        throw new Error(await getApiErrorMessage(response, 'Login failed'));
       }
 
       const data = await response.json();
@@ -162,7 +198,10 @@ export default function App() {
 
       initializeSocket(data.token);
     } catch (error: any) {
-      alert('Login failed: ' + error.message);
+      const message = error instanceof TypeError
+        ? `Cannot reach the backend API at ${BACKEND_URL}`
+        : error.message;
+      alert('Login failed: ' + message);
     } finally {
       setIsLoading(false);
     }
@@ -194,10 +233,10 @@ export default function App() {
       });
 
       if (!response.ok) {
-        throw new Error('Sign up failed');
+        throw new Error(await getApiErrorMessage(response, 'Sign up failed'));
       }
 
-      const data = await response.json();
+      await response.json();
       alert('Account created successfully! Please sign in.');
       setIsSignUp(false);
       setSignUpName('');
@@ -205,7 +244,10 @@ export default function App() {
       setSignUpPassword('');
       setSignUpConfirmPassword('');
     } catch (error: any) {
-      alert('Sign up failed: ' + error.message);
+      const message = error instanceof TypeError
+        ? `Cannot reach the backend API at ${BACKEND_URL}`
+        : error.message;
+      alert('Sign up failed: ' + message);
     } finally {
       setIsLoading(false);
     }

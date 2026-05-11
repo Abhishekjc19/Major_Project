@@ -129,7 +129,6 @@ async function seedDatabase() {
         destination: busData.destination,
         capacity: busData.capacity,
         current_occupancy: Math.floor(Math.random() * (busData.capacity * 0.9)),
-        assigned_conductor: conductor,
       });
 
       const savedBus = await busRepo.save(bus);
