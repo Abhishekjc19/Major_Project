@@ -191,3 +191,41 @@ class TestAnalytics:
         assert "demand_by_hour" in data
         assert isinstance(data["demand_by_hour"], dict)
         assert "busiest_hour" in data
+
+# ── Stops ─────────────────────────────────────────────────────────────────────
+class TestStops:
+    def test_get_stops_returns_list(self):
+        r = client.get("/stops", params={"route_id": "ROUTE-1"})
+        assert r.status_code == 200
+        data = r.json()
+        assert isinstance(data, list)
+        assert len(data) == 15
+        assert data[0]["stop_name"] == "Central Station"
+        assert data[0]["stop_seq"] == 1
+        assert "stop_lat" in data[0]
+        assert "stop_lon" in data[0]
+
+
+# ── Conductor Auth ────────────────────────────────────────────────────────────
+class TestConductorAuth:
+    def test_auth_rejected_with_invalid_key(self, monkeypatch):
+        monkeypatch.setenv("CONDUCTOR_API_KEY", "secret-test-key")
+        t = _make_ticket()
+        r = client.post(
+            "/tickets",
+            json=t,
+            headers={"X-Conductor-Api-Key": "wrong-key"},
+        )
+        assert r.status_code == 401
+
+    def test_auth_accepted_with_valid_key(self, monkeypatch):
+        monkeypatch.setenv("CONDUCTOR_API_KEY", "secret-test-key")
+        t = _make_ticket()
+        r = client.post(
+            "/tickets",
+            json=t,
+            headers={"X-Conductor-Api-Key": "secret-test-key"},
+        )
+        assert r.status_code == 201
+
+

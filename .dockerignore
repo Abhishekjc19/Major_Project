@@ -1,0 +1,9 @@
+.git
+.pytest_cache
+__pycache__
+*.pyc
+*.db
+app/build
+app/.dart_tool
+app/android/.gradle
+dashboard/.streamlit/secrets.toml

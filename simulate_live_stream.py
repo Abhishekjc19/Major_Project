@@ -9,10 +9,10 @@ Run:
     python simulate_live_stream.py
 """
 
-import time, random, urllib.request, json
+import time, random, urllib.request, json, os
 from datetime import datetime
 
-BACKEND_URL = "http://localhost:8000"
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 ROUTE_ID    = "ROUTE-1"
 NUM_STOPS   = 15
 
@@ -37,10 +37,15 @@ def post_ticket(bus_id, board, dest, count):
         "fare": round(1.5 + (dest - board) * 0.5, 2),
         "bus_capacity": 50
     }
+    headers = {"Content-Type": "application/json"}
+    api_key = os.getenv("CONDUCTOR_API_KEY")
+    if api_key:
+        headers["X-Conductor-Api-Key"] = api_key
+
     req = urllib.request.Request(
         f"{BACKEND_URL}/tickets",
         data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
+        headers=headers,
         method="POST"
     )
     try:

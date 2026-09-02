@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: bus-crowd-api
+    env: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: CONDUCTOR_API_KEY
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false

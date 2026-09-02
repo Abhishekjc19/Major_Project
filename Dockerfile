@@ -11,11 +11,11 @@ COPY backend/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt \
     && pip install --no-cache-dir scikit-learn xgboost
 
-# Copy application code
+# Copy application code and assets
 COPY backend/ ./backend/
 COPY models/xgb_clf.pkl ./models/xgb_clf.pkl
 COPY models/xgb_reg.pkl ./models/xgb_reg.pkl
-COPY datasets/occupancy_history.csv ./datasets/occupancy_history.csv
+COPY datasets/ ./datasets/
 
 ENV PYTHONUNBUFFERED=1
 

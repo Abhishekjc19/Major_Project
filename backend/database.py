@@ -1,16 +1,18 @@
 """
 database.py - SQLAlchemy database setup
 """
+import os
 import pathlib
 from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 from datetime import datetime
 
 BASE_DIR = pathlib.Path(__file__).parent.parent
-DB_PATH  = BASE_DIR / "bus_crowd.db"
-DATABASE_URL = f"sqlite:///{DB_PATH}"
+DB_PATH = BASE_DIR / "bus_crowd.db"
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DB_PATH}")
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 class Base(DeclarativeBase):
