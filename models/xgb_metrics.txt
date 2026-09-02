@@ -1,0 +1,6 @@
+clf_accuracy=0.708848
+clf_precision=0.664174
+clf_recall=0.708848
+clf_f1=0.670020
+reg_mae=3.352171
+reg_rmse=4.713157
