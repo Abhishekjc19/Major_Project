@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_light">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/brand_primary"
+        style="@style/Widget.BusCrowd.Toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Server URL"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_secondary" />
+
+        <EditText
+            android:id="@+id/et_settings_url"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/bg_input"
+            android:hint="http://10.0.2.2:8000"
+            android:textSize="14sp"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:layout_marginTop="6dp"
+            android:inputType="textUri"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/btn_settings_save_url"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Save URL"
+            android:layout_marginTop="12dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/border_light"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/btn_settings_switch_role"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Switch Role"
+            android:backgroundTint="@color/bg_light"
+            android:textColor="@color/brand_primary"
+            app:strokeColor="@color/brand_primary"
+            app:strokeWidth="1dp" />
+    </LinearLayout>
+</LinearLayout>

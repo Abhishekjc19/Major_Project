@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand -->
+    <color name="brand_primary">#1A6B4A</color>
+    <color name="brand_primary_light">#E8F5EE</color>
+    <color name="brand_primary_dark">#124A33</color>
+
+    <!-- Background -->
+    <color name="bg_light">#F5F7F6</color>
+    <color name="bg_white">#FFFFFF</color>
+
+    <!-- Text -->
+    <color name="text_primary">#1A1D1C</color>
+    <color name="text_secondary">#6B7280</color>
+    <color name="text_muted">#9CA3AF</color>
+    <color name="text_white">#FFFFFF</color>
+
+    <!-- Border -->
+    <color name="border_light">#E5E7EB</color>
+
+    <!-- Crowd Levels -->
+    <color name="crowd_plenty">#1A6B4A</color>
+    <color name="crowd_plenty_bg">#E8F5EE</color>
+    <color name="crowd_few">#D97706</color>
+    <color name="crowd_few_bg">#FEF3C7</color>
+    <color name="crowd_standing">#EA580C</color>
+    <color name="crowd_standing_bg">#FFF7ED</color>
+    <color name="crowd_full">#DC2626</color>
+    <color name="crowd_full_bg">#FEF2F2</color>
+
+    <!-- Error -->
+    <color name="error">#DC2626</color>
+
+    <!-- Status bar -->
+    <color name="status_bar">#1A6B4A</color>
+</resources>

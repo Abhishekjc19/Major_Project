@@ -60,6 +60,15 @@ app/ios/Pods/
 app/android/.gradle/
 app/android/local.properties
 
+# Android (Java)
+android-app/.gradle/
+android-app/build/
+android-app/app/build/
+android-app/local.properties
+android-app/.idea/
+android-app/*.iml
+android-app/app/*.iml
+
 # Databases
 *.db
 *.sqlite

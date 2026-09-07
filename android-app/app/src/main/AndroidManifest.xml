@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@android:drawable/sym_def_app_icon"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.BusCrowd"
+        android:usesCleartextTraffic="true">
+
+        <!-- Splash -->
+        <activity
+            android:name=".activities.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BusCrowd.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Onboarding -->
+        <activity
+            android:name=".activities.OnboardingActivity"
+            android:exported="false" />
+
+        <!-- Role Gate -->
+        <activity
+            android:name=".activities.RoleGateActivity"
+            android:exported="false" />
+
+        <!-- Passenger -->
+        <activity android:name=".activities.passenger.PassengerHomeActivity" android:exported="false" />
+        <activity android:name=".activities.passenger.RouteResultsActivity" android:exported="false" />
+        <activity android:name=".activities.passenger.AlertsActivity" android:exported="false" />
+        <activity android:name=".activities.passenger.SettingsActivity" android:exported="false" />
+
+        <!-- Conductor -->
+        <activity android:name=".activities.conductor.ConductorAuthActivity" android:exported="false" />
+        <activity android:name=".activities.conductor.ConductorActivity" android:exported="false" />
+        <activity android:name=".activities.conductor.ConductorHistoryActivity" android:exported="false" />
+
+    </application>
+</manifest>

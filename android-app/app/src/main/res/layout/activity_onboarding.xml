@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/brand_primary">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_onboarding"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_dots"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabBackground="@drawable/bg_badge_primary"
+        app:tabGravity="center"
+        app:tabIndicatorColor="@color/text_white"
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
+
+    <Button
+        android:id="@+id/btn_onboarding_next"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_margin="24dp"
+        android:text="@string/next"
+        android:background="#FFFFFFFF"
+        android:textColor="@color/brand_primary"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+</LinearLayout>
