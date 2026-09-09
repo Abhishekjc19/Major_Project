@@ -13,9 +13,9 @@ public class AppConfig {
     // Conductor API key (change for production)
     public static final String CONDUCTOR_API_KEY = "dev-conductor-key-change-me";
 
-    // Route info
-    public static final String ROUTE_ID      = "ROUTE-1";
-    public static final String ROUTE_NAME    = "City Centre - Airport Express";
+    // Route info (BMTC Bengaluru)
+    public static final String ROUTE_ID      = "BMTC-500D";
+    public static final String ROUTE_NAME    = "BMTC Silk Board ↔ Hebbal Express";
     public static final int    TOTAL_STOPS   = 15;
     public static final int    DEFAULT_CAPACITY = 50;
 

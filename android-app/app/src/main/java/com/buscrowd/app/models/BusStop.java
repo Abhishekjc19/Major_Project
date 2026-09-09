@@ -33,24 +33,24 @@ public class BusStop {
         return stopSeq + ". " + stopName;
     }
 
-    /** Default 15-stop list shown when the API is unreachable. */
+    /** Default BMTC Bengaluru stops list shown when the API is offline. */
     public static List<BusStop> getDefaultStops() {
         List<BusStop> stops = new ArrayList<>();
-        stops.add(new BusStop(1,  "City Centre Terminal",   12.9716, 77.5946));
-        stops.add(new BusStop(2,  "Market Square",          12.9726, 77.5956));
-        stops.add(new BusStop(3,  "Central Park",           12.9740, 77.5970));
-        stops.add(new BusStop(4,  "University Gate",        12.9755, 77.5985));
-        stops.add(new BusStop(5,  "Hospital Junction",      12.9770, 77.6000));
-        stops.add(new BusStop(6,  "Tech Hub",               12.9785, 77.6015));
-        stops.add(new BusStop(7,  "Industrial Zone",        12.9800, 77.6030));
-        stops.add(new BusStop(8,  "Residential Area",       12.9815, 77.6045));
-        stops.add(new BusStop(9,  "Shopping Mall",          12.9830, 77.6060));
-        stops.add(new BusStop(10, "Sports Complex",         12.9845, 77.6075));
-        stops.add(new BusStop(11, "Outer Ring Road",        12.9860, 77.6090));
-        stops.add(new BusStop(12, "Satellite Town",         12.9875, 77.6105));
-        stops.add(new BusStop(13, "Airport Road Junction",  12.9890, 77.6120));
-        stops.add(new BusStop(14, "Airport Check-In",       12.9905, 77.6135));
-        stops.add(new BusStop(15, "Airport Terminal",       12.9920, 77.6150));
+        stops.add(new BusStop(1,  "Central Silk Board Junction",      12.9172, 77.6228));
+        stops.add(new BusStop(2,  "HSR Layout BDA Complex",          12.9116, 77.6389));
+        stops.add(new BusStop(3,  "Agara Junction",                  12.9257, 77.6483));
+        stops.add(new BusStop(4,  "Iblur Bus Stop",                  12.9238, 77.6625));
+        stops.add(new BusStop(5,  "Bellandur EcoSpace",              12.9282, 77.6821));
+        stops.add(new BusStop(6,  "Kadubeesanahalli",                12.9372, 77.6934));
+        stops.add(new BusStop(7,  "Marathahalli Bridge",             12.9569, 77.7011));
+        stops.add(new BusStop(8,  "ISRO Junction",                   12.9642, 77.6965));
+        stops.add(new BusStop(9,  "Mahadevapura",                    12.9881, 77.6983));
+        stops.add(new BusStop(10, "Tin Factory",                     12.9964, 77.6698));
+        stops.add(new BusStop(11, "Kasturi Nagar",                   13.0083, 77.6534));
+        stops.add(new BusStop(12, "Kalyan Nagar HRBR Layout",        13.0234, 77.6412));
+        stops.add(new BusStop(13, "Nagawara Junction",               13.0418, 77.6189));
+        stops.add(new BusStop(14, "Hebbal Flyover Bus Stop",         13.0359, 77.5970));
+        stops.add(new BusStop(15, "Kempegowda Int. Airport (KIAS)", 13.1986, 77.7066));
         return stops;
     }
 }

@@ -390,24 +390,85 @@ def get_analytics(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# GET /stops
+# GET /stops — BMTC Bengaluru Bus Routes & Stops
 # ══════════════════════════════════════════════════════════════════════════════
+BMTC_ROUTES = {
+    "BMTC-500D": {
+        "name": "Central Silk Board ↔ Hebbal (Outer Ring Road Express)",
+        "stops": [
+            {"stop_id": "ST-01", "stop_seq": 1, "stop_name": "Central Silk Board Junction", "stop_lat": 12.9172, "stop_lon": 77.6228},
+            {"stop_id": "ST-02", "stop_seq": 2, "stop_name": "HSR Layout BDA Complex", "stop_lat": 12.9116, "stop_lon": 77.6389},
+            {"stop_id": "ST-03", "stop_seq": 3, "stop_name": "Agara Junction", "stop_lat": 12.9257, "stop_lon": 77.6483},
+            {"stop_id": "ST-04", "stop_seq": 4, "stop_name": "Iblur Bus Stop", "stop_lat": 12.9238, "stop_lon": 77.6625},
+            {"stop_id": "ST-05", "stop_seq": 5, "stop_name": "Bellandur EcoSpace", "stop_lat": 12.9282, "stop_lon": 77.6821},
+            {"stop_id": "ST-06", "stop_seq": 6, "stop_name": "Kadubeesanahalli", "stop_lat": 12.9372, "stop_lon": 77.6934},
+            {"stop_id": "ST-07", "stop_seq": 7, "stop_name": "Marathahalli Bridge", "stop_lat": 12.9569, "stop_lon": 77.7011},
+            {"stop_id": "ST-08", "stop_seq": 8, "stop_name": "ISRO Junction", "stop_lat": 12.9642, "stop_lon": 77.6965},
+            {"stop_id": "ST-09", "stop_seq": 9, "stop_name": "Mahadevapura", "stop_lat": 12.9881, "stop_lon": 77.6983},
+            {"stop_id": "ST-10", "stop_seq": 10, "stop_name": "Tin Factory", "stop_lat": 12.9964, "stop_lon": 77.6698},
+            {"stop_id": "ST-11", "stop_seq": 11, "stop_name": "Kasturi Nagar", "stop_lat": 13.0083, "stop_lon": 77.6534},
+            {"stop_id": "ST-12", "stop_seq": 12, "stop_name": "Kalyan Nagar HRBR Layout", "stop_lat": 13.0234, "stop_lon": 77.6412},
+            {"stop_id": "ST-13", "stop_seq": 13, "stop_name": "Nagawara Junction", "stop_lat": 13.0418, "stop_lon": 77.6189},
+            {"stop_id": "ST-14", "stop_seq": 14, "stop_name": "Hebbal Flyover Bus Stop", "stop_lat": 13.0359, "stop_lon": 77.5970},
+        ]
+    },
+    "BMTC-335E": {
+        "name": "Kempegowda Bus Station (Majestic) ↔ ITPL Whitefield",
+        "stops": [
+            {"stop_id": "ST-101", "stop_seq": 1, "stop_name": "Kempegowda Bus Station (Majestic KBS)", "stop_lat": 12.9779, "stop_lon": 77.5713},
+            {"stop_id": "ST-102", "stop_seq": 2, "stop_name": "Corporation Circle", "stop_lat": 12.9654, "stop_lon": 77.5898},
+            {"stop_id": "ST-103", "stop_seq": 3, "stop_name": "MG Road Metro Station", "stop_lat": 12.9756, "stop_lon": 77.6066},
+            {"stop_id": "ST-104", "stop_seq": 4, "stop_name": "Indiranagar 100ft Road", "stop_lat": 12.9784, "stop_lon": 77.6408},
+            {"stop_id": "ST-105", "stop_seq": 5, "stop_name": "HAL Main Gate", "stop_lat": 12.9592, "stop_lon": 77.6654},
+            {"stop_id": "ST-106", "stop_seq": 6, "stop_name": "Marathahalli Multiplex", "stop_lat": 12.9543, "stop_lon": 77.7022},
+            {"stop_id": "ST-107", "stop_seq": 7, "stop_name": "Kundalahalli Gate", "stop_lat": 12.9682, "stop_lon": 77.7128},
+            {"stop_id": "ST-108", "stop_seq": 8, "stop_name": "AECS Layout", "stop_lat": 12.9721, "stop_lon": 77.7189},
+            {"stop_id": "ST-109", "stop_seq": 9, "stop_name": "Vydehi Hospital Whitefield", "stop_lat": 12.9771, "stop_lon": 77.7289},
+            {"stop_id": "ST-110", "stop_seq": 10, "stop_name": "ITPL Main Gate Whitefield", "stop_lat": 12.9866, "stop_lon": 77.7381},
+        ]
+    },
+    "BMTC-356CW": {
+        "name": "Kempegowda Bus Station (Majestic) ↔ Electronic City Wipro Gate",
+        "stops": [
+            {"stop_id": "ST-201", "stop_seq": 1, "stop_name": "Kempegowda Bus Station (Majestic KBS)", "stop_lat": 12.9779, "stop_lon": 77.5713},
+            {"stop_id": "ST-202", "stop_seq": 2, "stop_name": "Shanthi Nagar Bus Terminal", "stop_lat": 12.9554, "stop_lon": 77.5938},
+            {"stop_id": "ST-203", "stop_seq": 3, "stop_name": "Dairy Circle Junction", "stop_lat": 12.9378, "stop_lon": 77.6012},
+            {"stop_id": "ST-204", "stop_seq": 4, "stop_name": "Koramangala Checkpost", "stop_lat": 12.9341, "stop_lon": 77.6189},
+            {"stop_id": "ST-205", "stop_seq": 5, "stop_name": "Central Silk Board", "stop_lat": 12.9172, "stop_lon": 77.6228},
+            {"stop_id": "ST-206", "stop_seq": 6, "stop_name": "Bommanahalli", "stop_lat": 12.9062, "stop_lon": 77.6289},
+            {"stop_id": "ST-207", "stop_seq": 7, "stop_name": "Garuvebhavipalya", "stop_lat": 12.8951, "stop_lon": 77.6351},
+            {"stop_id": "ST-208", "stop_seq": 8, "stop_name": "Kudlu Gate", "stop_lat": 12.8834, "stop_lon": 77.6432},
+            {"stop_id": "ST-209", "stop_seq": 9, "stop_name": "Singasandra", "stop_lat": 12.8712, "stop_lon": 77.6512},
+            {"stop_id": "ST-210", "stop_seq": 10, "stop_name": "Electronic City Wipro Gate 1", "stop_lat": 12.8452, "stop_lon": 77.6602},
+        ]
+    },
+    "BMTC-KIAS9": {
+        "name": "Majestic KBS ↔ Kempegowda International Airport (Vayu Vajra)",
+        "stops": [
+            {"stop_id": "ST-301", "stop_seq": 1, "stop_name": "Kempegowda Bus Station (Majestic KBS)", "stop_lat": 12.9779, "stop_lon": 77.5713},
+            {"stop_id": "ST-302", "stop_seq": 2, "stop_name": "Mekhri Circle", "stop_lat": 13.0112, "stop_lon": 77.5832},
+            {"stop_id": "ST-303", "stop_seq": 3, "stop_name": "Hebbal Flyover", "stop_lat": 13.0359, "stop_lon": 77.5970},
+            {"stop_id": "ST-304", "stop_seq": 4, "stop_name": "Yelahanka Bypass", "stop_lat": 13.1007, "stop_lon": 77.5963},
+            {"stop_id": "ST-305", "stop_seq": 5, "stop_name": "Trumpet Flyover Airport Road", "stop_lat": 13.1812, "stop_lon": 77.6641},
+            {"stop_id": "ST-306", "stop_seq": 6, "stop_name": "Kempegowda International Airport Terminal 1 & 2", "stop_lat": 13.1986, "stop_lon": 77.7066},
+        ]
+    }
+}
+
 @app.get("/stops", tags=["Transit"])
-def get_stops(route_id: str = Query("ROUTE-1")):
-    """Return ordered list of bus stops for the route with coordinates and sequence numbers."""
-    stops_csv = pathlib.Path(__file__).parent.parent / "datasets" / "gtfs_raw" / "stops.csv"
-    if stops_csv.exists():
-        df_stops = pd.read_csv(stops_csv)
-        return df_stops.to_dict(orient="records")
-    # Fallback if csv not present
+def get_stops(route_id: str = Query("BMTC-500D")):
+    """Return ordered list of BMTC Bengaluru bus stops with GPS coordinates and sequence numbers."""
+    if route_id in BMTC_ROUTES:
+        return BMTC_ROUTES[route_id]["stops"]
+    # Default to BMTC-500D Outer Ring Road Express
+    return BMTC_ROUTES["BMTC-500D"]["stops"]
+
+@app.get("/bmtc/routes", tags=["Transit"])
+def get_bmtc_routes():
+    """Return available BMTC Bengaluru routes."""
     return [
-        {"stop_id": f"S{i+1:02d}", "stop_seq": i+1, "stop_name": name, "stop_lat": 12.9716 + i*0.018, "stop_lon": 77.5946 + i*0.015}
-        for i, name in enumerate([
-            "Central Station", "Market Square", "University Gate", "Hospital Junction",
-            "Tech Park", "Old Town", "River Bridge", "Sports Complex", "Shopping Mall",
-            "Residential Colony", "Industrial Area", "Suburb North", "Suburb East",
-            "Airport Road", "Airport Terminal"
-        ])
+        {"route_id": k, "route_name": v["name"], "total_stops": len(v["stops"])}
+        for k, v in BMTC_ROUTES.items()
     ]
 
 
