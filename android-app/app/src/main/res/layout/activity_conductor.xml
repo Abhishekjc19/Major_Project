@@ -27,13 +27,17 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="40dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:clipToPadding="false"
+            android:paddingBottom="60dp">
 
             <!-- LIVE HUD CARD -->
             <LinearLayout
@@ -249,7 +253,7 @@
                             android:id="@+id/tv_conductor_fare"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="$1.50"
+                            android:text="₹15.00"
                             android:textSize="30sp"
                             android:textStyle="bold"
                             android:textColor="@color/brand_primary" />

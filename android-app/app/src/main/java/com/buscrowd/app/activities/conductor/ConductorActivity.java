@@ -133,6 +133,30 @@ public class ConductorActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        refreshLiveStatus();
+    }
+
+    private void refreshLiveStatus() {
+        ApiClient.get(this).getLiveStatus(BUS_ID).enqueue(new Callback<LiveBusState>() {
+            @Override
+            public void onResponse(@NonNull Call<LiveBusState> c, @NonNull Response<LiveBusState> r) {
+                if (r.isSuccessful() && r.body() != null) {
+                    LiveBusState s = r.body();
+                    liveOnboard = s.onboard;
+                    busCapacity = s.capacity;
+                    seatsFree   = s.seatsFree;
+                    loadRatio   = s.loadRatio;
+                    crowdBand   = s.crowdBand;
+                    runOnUiThread(() -> updateHud());
+                }
+            }
+            @Override public void onFailure(@NonNull Call<LiveBusState> c, @NonNull Throwable t) {}
+        });
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_conductor, menu);
         return true;
@@ -169,22 +193,7 @@ public class ConductorActivity extends AppCompatActivity {
             @Override public void onFailure(@NonNull Call<List<BusStop>> c, @NonNull Throwable t) {}
         });
 
-        // Load live status
-        ApiClient.get(this).getLiveStatus(BUS_ID).enqueue(new Callback<LiveBusState>() {
-            @Override
-            public void onResponse(@NonNull Call<LiveBusState> c, @NonNull Response<LiveBusState> r) {
-                if (r.isSuccessful() && r.body() != null) {
-                    LiveBusState s = r.body();
-                    liveOnboard = s.onboard;
-                    busCapacity = s.capacity;
-                    seatsFree   = s.seatsFree;
-                    loadRatio   = s.loadRatio;
-                    crowdBand   = s.crowdBand;
-                    runOnUiThread(() -> updateHud());
-                }
-            }
-            @Override public void onFailure(@NonNull Call<LiveBusState> c, @NonNull Throwable t) {}
-        });
+        refreshLiveStatus();
 
         // Offline queue count
         offlineCount = StorageService.getOfflineTickets(this).size();
@@ -205,8 +214,8 @@ public class ConductorActivity extends AppCompatActivity {
         tvPassengerCount.setText(String.valueOf(passengerCount));
         if (boarding != null && dest != null) {
             double fare = CrowdUtils.calculateFare(boarding.stopSeq, dest.stopSeq, passengerCount);
-            tvFare.setText(String.format("$%.2f", fare));
-            btnIssue.setText(String.format("ISSUE TICKET ($%.2f)", fare));
+            tvFare.setText(String.format("₹%.2f", fare));
+            btnIssue.setText(String.format("ISSUE TICKET (₹%.2f)", fare));
         }
     }
 
