@@ -36,11 +36,12 @@ public class CrowdForecastAdapter extends RecyclerView.Adapter<CrowdForecastAdap
     @Override
     public void onBindViewHolder(@NonNull VH h, int pos) {
         PredictedCrowd p = items.get(pos);
+        double ratio = p.getLoadRatio();
         h.time.setText(p.timeLabel != null ? p.timeLabel : "—");
         h.crowdLabel.setText(CrowdUtils.crowdLabel(p.crowdBand));
         h.crowdLabel.setTextColor(CrowdUtils.crowdColor(ctx, p.crowdBand));
-        CrowdUtils.applyCrowdMeter(ctx, h.meter, p.predictedLoad, p.crowdBand);
-        h.percent.setText(String.format("%d%%", (int) Math.round(p.predictedLoad * 100)));
+        CrowdUtils.applyCrowdMeter(ctx, h.meter, ratio, p.crowdBand);
+        h.percent.setText(String.format("%d%%", (int) Math.round(ratio * 100)));
     }
 
     @Override public int getItemCount() { return items.size(); }
