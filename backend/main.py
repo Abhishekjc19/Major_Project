@@ -244,6 +244,14 @@ def reset_bus_state(
     db: Session = Depends(get_db),
 ):
     """Reset live occupancy and start a fresh trip for a bus."""
+    # Delete old tickets for this bus so re-hydration doesn't bring back old runs
+    try:
+        db.query(TicketDB).filter(TicketDB.bus_id == bus_id).delete()
+        db.commit()
+    except Exception as exc:
+        db.rollback()
+        print(f"Error clearing DB tickets for {bus_id}: {exc}")
+
     if bus_id in _bus_state:
         _bus_state[bus_id].reset()
     else:
