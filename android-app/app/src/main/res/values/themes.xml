@@ -31,11 +31,15 @@
     <style name="Widget.BusCrowd.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:backgroundTint">@color/brand_primary</item>
         <item name="android:textColor">@color/text_white</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
         <item name="cornerRadius">14dp</item>
-        <item name="android:paddingTop">14dp</item>
-        <item name="android:paddingBottom">14dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
     </style>
 
     <!-- Card style -->

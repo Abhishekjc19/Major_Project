@@ -265,16 +265,18 @@
                 <Button
                     android:id="@+id/btn_issue_ticket"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="54dp"
                     android:text="ISSUE TICKET"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:layout_marginTop="24dp" />
 
                 <!-- Sync Button -->
                 <Button
                     android:id="@+id/btn_sync_offline"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
                     android:text="Sync Offline Queue"
                     android:backgroundTint="@color/bg_light"
                     android:textColor="@color/crowd_few"
@@ -284,7 +286,8 @@
                 <Button
                     android:id="@+id/btn_reset_trip"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
                     android:text="🔄 RESET BUS FOR NEW TRIP (0 ONBOARD)"
                     android:backgroundTint="#FFF0F0"
                     android:textColor="@color/crowd_full"
