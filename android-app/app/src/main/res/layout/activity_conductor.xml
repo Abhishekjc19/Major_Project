@@ -275,6 +275,16 @@
                     android:textColor="@color/crowd_few"
                     android:layout_marginTop="8dp" />
 
+                <!-- Reset Trip Button -->
+                <Button
+                    android:id="@+id/btn_reset_trip"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="🔄 RESET BUS FOR NEW TRIP (0 ONBOARD)"
+                    android:backgroundTint="#FFF0F0"
+                    android:textColor="@color/crowd_full"
+                    android:layout_marginTop="8dp" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

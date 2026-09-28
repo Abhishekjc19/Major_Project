@@ -236,6 +236,38 @@ def ingest_ticket(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# POST /reset — Start New Trip
+# ══════════════════════════════════════════════════════════════════════════════
+@app.post("/reset", tags=["Live"])
+def reset_bus_state(
+    bus_id: str = Query("BUS-01"),
+    db: Session = Depends(get_db),
+):
+    """Reset live occupancy and start a fresh trip for a bus."""
+    if bus_id in _bus_state:
+        _bus_state[bus_id].reset()
+    else:
+        _bus_state[bus_id] = IncrementalOccupancy(capacity=50)
+
+    _bus_meta[bus_id] = {
+        "route_id": "BMTC-500D",
+        "trip_id": f"TRIP-LIVE-{datetime.now().strftime('%H%M')}",
+        "capacity": 50,
+        "current_stop": 1,
+    }
+
+    state = _bus_state[bus_id].state_at_segment(1)
+    return {
+        "status": "reset_success",
+        "bus_id": bus_id,
+        "onboard": state.onboard,
+        "seats_free": state.seats_free,
+        "crowd_band": state.band.value,
+        "message": f"Bus {bus_id} reset to 0 passengers for a new trip."
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # GET /live
 # ══════════════════════════════════════════════════════════════════════════════
 @app.get("/live", response_model=LiveStatusOut, tags=["Live"])

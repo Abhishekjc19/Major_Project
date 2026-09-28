@@ -55,4 +55,8 @@ public interface ApiInterface {
     // 7. GET /analytics
     @GET("/analytics")
     Call<Map<String, Object>> getAnalytics(@Query("route_id") String routeId);
+
+    // 8. POST /reset
+    @POST("/reset")
+    Call<Map<String, Object>> resetBus(@Query("bus_id") String busId);
 }

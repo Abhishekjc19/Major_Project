@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -111,17 +112,20 @@ public class ConductorActivity extends AppCompatActivity {
             if (passengerCount < 10) { passengerCount++; updateFareDisplay(); }
         });
 
+        Button btnReset = findViewById(R.id.btn_reset_trip);
+        btnReset.setOnClickListener(v -> resetTrip());
+
         btnIssue.setOnClickListener(v -> issueTicket());
         btnSync.setOnClickListener(v -> syncOfflineQueue());
 
         // Spinner change → update fare
-        spinnerBoarding.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(android.widget.AdapterView<?> parent, View view, int pos, long id) { updateFareDisplay(); }
-            @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+        spinnerBoarding.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) { updateFareDisplay(); }
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
-        spinnerDest.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(android.widget.AdapterView<?> parent, View view, int pos, long id) { updateFareDisplay(); }
-            @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+        spinnerDest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) { updateFareDisplay(); }
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         initData();
@@ -319,6 +323,39 @@ public class ConductorActivity extends AppCompatActivity {
                         : (offlineCount > 0 ? "❌ Server unreachable" : "All tickets in sync");
                 Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
             });
+        });
+    }
+
+    private void resetTrip() {
+        ApiClient.get(this).resetBus(BUS_ID).enqueue(new Callback<Map<String, Object>>() {
+            @Override
+            public void onResponse(@NonNull Call<Map<String, Object>> call,
+                                   @NonNull Response<Map<String, Object>> response) {
+                runOnUiThread(() -> {
+                    liveOnboard = 0;
+                    seatsFree   = busCapacity;
+                    loadRatio   = 0.0;
+                    crowdBand   = "Plenty of seats";
+                    tripId      = CrowdUtils.generateTripId();
+                    updateHud();
+                    updateFareDisplay();
+                    Toast.makeText(ConductorActivity.this,
+                            "🔄 Bus reset! Fresh trip started with 0 passengers.",
+                            Toast.LENGTH_LONG).show();
+                });
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Map<String, Object>> call, @NonNull Throwable t) {
+                runOnUiThread(() -> {
+                    liveOnboard = 0;
+                    seatsFree   = busCapacity;
+                    loadRatio   = 0.0;
+                    crowdBand   = "Plenty of seats";
+                    updateHud();
+                    Toast.makeText(ConductorActivity.this, "🔄 Trip reset locally.", Toast.LENGTH_SHORT).show();
+                });
+            }
         });
     }
 
