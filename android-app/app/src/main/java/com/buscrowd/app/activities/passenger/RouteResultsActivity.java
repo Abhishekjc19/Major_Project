@@ -100,9 +100,10 @@ public class RouteResultsActivity extends AppCompatActivity {
     }
 
     private void updateLiveUi(int onboard, int seatsFree, double loadRatio, String crowdBand, boolean isLive) {
+        int loadPct = (int) Math.round(loadRatio * 100);
         tvLiveOnboard.setText(String.valueOf(onboard));
         tvLiveSeats.setText(String.valueOf(seatsFree));
-        tvLiveBand.setText(CrowdUtils.crowdLabel(crowdBand));
+        tvLiveBand.setText(CrowdUtils.crowdLabel(crowdBand) + " (" + loadPct + "% full)");
         tvLiveBand.setTextColor(CrowdUtils.crowdColor(this, crowdBand));
         if (isLive) {
             tvLiveStatus.setVisibility(View.GONE);

@@ -243,6 +243,33 @@ def ingest_ticket(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# POST /alight (Delete/Alight Passengers)
+# ══════════════════════════════════════════════════════════════════════════════
+@app.post("/alight", tags=["Ingest"])
+def alight_passenger(
+    bus_id: str = Query("BUS-01"),
+    passenger_count: int = Query(1, ge=1, le=10),
+    db: Session = Depends(get_db),
+):
+    """Delete / alight passengers from a bus in real-time."""
+    tracker = _get_or_create_tracker(bus_id)
+    tracker.remove_passengers(passenger_count)
+
+    meta = _bus_meta.get(bus_id, {"route_id": "BMTC-500D", "trip_id": "TRIP-LIVE", "capacity": 50, "current_stop": 1})
+    stop = meta.get("current_stop", 1)
+    state = tracker.state_at_segment(stop)
+
+    return {
+        "status": "alight_success",
+        "bus_id": bus_id,
+        "onboard_now": state.onboard,
+        "seats_free": state.seats_free,
+        "crowd_band": state.band.value,
+        "message": f"Removed {passenger_count} passenger(s) from bus {bus_id}."
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # POST /reset — Start New Trip
 # ══════════════════════════════════════════════════════════════════════════════
 @app.post("/reset", tags=["Live"])

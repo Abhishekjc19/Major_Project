@@ -59,4 +59,11 @@ public interface ApiInterface {
     // 8. POST /reset
     @POST("/reset")
     Call<Map<String, Object>> resetBus(@Query("bus_id") String busId);
+
+    // 9. POST /alight
+    @POST("/alight")
+    Call<Map<String, Object>> alightPassenger(
+            @Query("bus_id") String busId,
+            @Query("passenger_count") int passengerCount
+    );
 }

@@ -183,6 +183,22 @@ class IncrementalOccupancy:
         """Clear all ticket data (start a new trip)."""
         self._tickets.clear()
 
+    def remove_passengers(self, count: int = 1) -> None:
+        """Manually alight / delete passengers from live occupancy."""
+        if not self._tickets:
+            return
+        remaining_to_remove = count
+        new_tickets = []
+        for board, dest, p_count in reversed(self._tickets):
+            if remaining_to_remove <= 0:
+                new_tickets.insert(0, (board, dest, p_count))
+            elif p_count > remaining_to_remove:
+                new_tickets.insert(0, (board, dest, p_count - remaining_to_remove))
+                remaining_to_remove = 0
+            else:
+                remaining_to_remove -= p_count
+        self._tickets = new_tickets
+
     @property
     def ticket_count(self) -> int:
         return len(self._tickets)

@@ -271,6 +271,17 @@
                     android:textSize="15sp"
                     android:layout_marginTop="24dp" />
 
+                <!-- Delete / Alight Passenger Button -->
+                <Button
+                    android:id="@+id/btn_alight_passenger"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:text="➖ PASSENGER ALIGHTED / REMOVE (-1)"
+                    android:backgroundTint="#FFF8E7"
+                    android:textColor="@color/crowd_few"
+                    android:layout_marginTop="8dp" />
+
                 <!-- Sync Button -->
                 <Button
                     android:id="@+id/btn_sync_offline"

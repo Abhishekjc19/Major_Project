@@ -112,8 +112,11 @@ public class ConductorActivity extends AppCompatActivity {
             if (passengerCount < 10) { passengerCount++; updateFareDisplay(); }
         });
 
-        Button btnReset = findViewById(R.id.btn_reset_trip);
+        Button btnReset  = findViewById(R.id.btn_reset_trip);
+        Button btnAlight = findViewById(R.id.btn_alight_passenger);
+
         btnReset.setOnClickListener(v -> resetTrip());
+        btnAlight.setOnClickListener(v -> alightPassenger());
 
         btnIssue.setOnClickListener(v -> issueTicket());
         btnSync.setOnClickListener(v -> syncOfflineQueue());
@@ -333,6 +336,51 @@ public class ConductorActivity extends AppCompatActivity {
                 Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
             });
         });
+    }
+
+    private void alightPassenger() {
+        if (liveOnboard <= 0) {
+            Toast.makeText(this, "Bus is already empty (0 onboard)", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ApiClient.get(this).alightPassenger(BUS_ID, 1).enqueue(new Callback<Map<String, Object>>() {
+            @Override
+            public void onResponse(@NonNull Call<Map<String, Object>> call,
+                                   @NonNull Response<Map<String, Object>> response) {
+                runOnUiThread(() -> {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Map<String, Object> res = response.body();
+                        Object onboardVal = res.get("onboard_now");
+                        liveOnboard = onboardVal instanceof Number
+                                ? ((Number) onboardVal).intValue()
+                                : Math.max(0, liveOnboard - 1);
+                        seatsFree = Math.max(0, busCapacity - liveOnboard);
+                        loadRatio = (double) liveOnboard / busCapacity;
+                        Object band = res.get("crowd_band");
+                        if (band != null) crowdBand = band.toString();
+                        updateHud();
+                        Toast.makeText(ConductorActivity.this,
+                                "➖ Passenger alighted! Onboard: " + liveOnboard,
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        decrementLocal();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Map<String, Object>> call, @NonNull Throwable t) {
+                runOnUiThread(() -> decrementLocal());
+            }
+        });
+    }
+
+    private void decrementLocal() {
+        liveOnboard = Math.max(0, liveOnboard - 1);
+        seatsFree   = Math.max(0, busCapacity - liveOnboard);
+        loadRatio   = (double) liveOnboard / busCapacity;
+        updateHud();
+        Toast.makeText(this, "➖ Removed 1 passenger. Onboard: " + liveOnboard, Toast.LENGTH_SHORT).show();
     }
 
     private void resetTrip() {
