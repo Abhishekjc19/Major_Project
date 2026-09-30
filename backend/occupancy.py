@@ -114,12 +114,13 @@ def compute_segment_occupancy(
     return results
 
 
-def _make_state(segment: int, onboard: int, capacity: int) -> SegmentState:
-    seats_free = max(0, capacity - onboard)
-    rho = onboard / capacity if capacity > 0 else 0.0
+def _make_state(segment: int, onboard: int, capacity: int, pass_holder_factor: float = 0.0) -> SegmentState:
+    effective_onboard = int(round(onboard * (1.0 + pass_holder_factor)))
+    seats_free = max(0, capacity - effective_onboard)
+    rho = effective_onboard / capacity if capacity > 0 else 0.0
     return SegmentState(
         segment=segment,
-        onboard=onboard,
+        onboard=effective_onboard,
         capacity=capacity,
         seats_free=seats_free,
         load_ratio=round(rho, 4),
@@ -162,7 +163,7 @@ class IncrementalOccupancy:
             )
         self._tickets.append((boarding_stop_seq, dest_stop_seq, passenger_count))
 
-    def state_at_segment(self, segment: int) -> SegmentState:
+    def state_at_segment(self, segment: int, pass_holder_factor: float = 0.0) -> SegmentState:
         """
         Return the occupancy state for segment j (between stop j and stop j+1).
         Uses the same formula as compute_segment_occupancy.
@@ -172,7 +173,7 @@ class IncrementalOccupancy:
             for (board, dest, count) in self._tickets
             if board <= segment < dest
         )
-        return _make_state(segment, onboard, self.capacity)
+        return _make_state(segment, onboard, self.capacity, pass_holder_factor)
 
     def snapshot(self, num_stops: int) -> List[SegmentState]:
         """Return SegmentState for all segments 1..(num_stops-1)."""

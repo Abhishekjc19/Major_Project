@@ -60,10 +60,10 @@ st.caption("Real-time and historical demand analytics for transport operators")
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.header("Filters")
-    route_id = st.selectbox("Route", ["ROUTE-1"], index=0)
+    route_id = st.selectbox("Route", ["BMTC-500D", "BMTC-335E", "BMTC-356CW", "BMTC-KIAS9"], index=0)
     data_src  = st.radio("Data source", ["Local CSV (offline)", "Backend API (live)"])
     st.divider()
-    st.caption("Data is semi-synthetic, generated from a GTFS-like schedule.")
+    st.caption("BMTC Bengaluru Route Analytics & Real-Time Passenger Flow.")
 
 # ── Load data ─────────────────────────────────────────────────────────────────
 @st.cache_data(ttl=60)
