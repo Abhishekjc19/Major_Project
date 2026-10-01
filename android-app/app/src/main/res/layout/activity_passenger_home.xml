@@ -55,6 +55,70 @@
                     android:layout_marginStart="12dp" />
             </LinearLayout>
 
+            <!-- Live Onboard Bus Count Card (Customer Feature) -->
+            <LinearLayout
+                android:id="@+id/card_live_passenger_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card"
+                android:padding="16dp"
+                android:layout_marginTop="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="🚌 LIVE BUS PASSENGER COUNT"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/brand_primary"
+                        android:letterSpacing="0.05" />
+
+                    <TextView
+                        android:id="@+id/tv_home_live_band"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="✅ Plenty of seats"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/crowd_plenty" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/tv_home_passengers_onboard"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="🧍 0 Passengers Onboard"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:id="@+id/tv_home_seats_free"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="💺 50 Seats Free"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/brand_primary" />
+                </LinearLayout>
+            </LinearLayout>
+
             <!-- Search Card -->
             <LinearLayout
                 android:layout_width="match_parent"

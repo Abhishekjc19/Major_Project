@@ -24,9 +24,11 @@ import com.buscrowd.app.R;
 import com.buscrowd.app.activities.RoleGateActivity;
 import com.buscrowd.app.activities.conductor.ConductorAuthActivity;
 import com.buscrowd.app.models.BusStop;
+import com.buscrowd.app.models.LiveBusState;
 import com.buscrowd.app.services.ApiClient;
 import com.buscrowd.app.services.LocationHelper;
 import com.buscrowd.app.services.StorageService;
+import com.buscrowd.app.utils.CrowdUtils;
 
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class PassengerHomeActivity extends AppCompatActivity {
     private Spinner spinnerFrom, spinnerTo;
     private ArrayAdapter<BusStop> stopAdapter;
     private TextView tvRouteBadge, tvRouteName;
+    private TextView tvHomePassengersOnboard, tvHomeSeatsFree, tvHomeLiveBand;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,10 @@ public class PassengerHomeActivity extends AppCompatActivity {
         tvRouteBadge  = findViewById(R.id.tv_route_badge);
         tvRouteName   = findViewById(R.id.tv_route_name);
 
+        tvHomePassengersOnboard = findViewById(R.id.tv_home_passengers_onboard);
+        tvHomeSeatsFree         = findViewById(R.id.tv_home_seats_free);
+        tvHomeLiveBand          = findViewById(R.id.tv_home_live_band);
+
         tvRouteBadge.setText(AppConfig.ROUTE_ID);
         tvRouteName.setText(AppConfig.ROUTE_NAME);
 
@@ -63,6 +70,7 @@ public class PassengerHomeActivity extends AppCompatActivity {
         stops = BusStop.getDefaultStops();
         setupSpinners();
         loadStopsFromApi();
+        loadLiveBusOccupancy();
 
         // Swap button
         ImageButton btnSwap = findViewById(R.id.btn_swap);
@@ -79,6 +87,12 @@ public class PassengerHomeActivity extends AppCompatActivity {
         // Find Buses
         Button btnFind = findViewById(R.id.btn_find_buses);
         btnFind.setOnClickListener(v -> searchBuses());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadLiveBusOccupancy();
     }
 
     @Override
@@ -164,6 +178,29 @@ public class PassengerHomeActivity extends AppCompatActivity {
                 && results[0] == PackageManager.PERMISSION_GRANTED) {
             detectNearestStop();
         }
+    }
+
+    private void loadLiveBusOccupancy() {
+        ApiClient.get(this).getLiveStatus("BUS-01").enqueue(new Callback<LiveBusState>() {
+            @Override
+            public void onResponse(@NonNull Call<LiveBusState> call,
+                                   @NonNull Response<LiveBusState> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    LiveBusState s = response.body();
+                    runOnUiThread(() -> {
+                        tvHomePassengersOnboard.setText("🧍 " + s.onboard + " Passengers Onboard");
+                        tvHomeSeatsFree.setText("💺 " + s.seatsFree + " Seats Free");
+                        tvHomeLiveBand.setText(CrowdUtils.crowdLabel(s.crowdBand));
+                        tvHomeLiveBand.setTextColor(CrowdUtils.crowdColor(PassengerHomeActivity.this, s.crowdBand));
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<LiveBusState> call, @NonNull Throwable t) {
+                // keep defaults
+            }
+        });
     }
 
     private void searchBuses() {
