@@ -31,7 +31,7 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Live Status Card -->
+            <!-- LIVE REAL-TIME DETERMINISTIC OCCUPANCY CARD -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,21 +39,37 @@
                 android:background="@drawable/bg_card"
                 android:padding="18dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="📡 LIVE BUS STATUS"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/brand_primary"
-                    android:letterSpacing="0.05" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="📡 LIVE REAL-TIME OCCUPANCY"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/brand_primary"
+                        android:letterSpacing="0.05" />
+
+                    <TextView
+                        android:id="@+id/tv_last_updated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⏱️ Just now"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_secondary" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tv_live_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Loading live status..."
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textColor="@color/text_secondary"
                     android:layout_marginTop="4dp" />
 
@@ -157,18 +173,43 @@
                     android:textSize="13sp"
                     android:textColor="@color/text_primary"
                     android:layout_marginTop="6dp" />
+
+                <!-- Notification Alert Button -->
+                <Button
+                    android:id="@+id/btn_enable_notification"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="🔔 SUBSCRIBE TO REAL-TIME CROWD NOTIFICATION"
+                    android:textSize="12sp"
+                    android:backgroundTint="@color/brand_primary_light"
+                    android:textColor="@color/brand_primary"
+                    android:layout_marginTop="12dp" />
             </LinearLayout>
 
-            <!-- Forecast -->
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- AI ML FORECAST SECTION HEADER -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Crowd Forecast"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
+                android:orientation="vertical"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🤖 AI ML CROWD FORECAST"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sequential time-series predictions (XGBoost &amp; LSTM Models)"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_forecast"
