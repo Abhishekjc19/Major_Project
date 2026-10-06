@@ -341,15 +341,26 @@ def get_live_status(
     pass_factor = 0.15 if is_peak else 0.05
     state    = tracker.state_at_segment(stop, pass_holder_factor=pass_factor)
 
+    extra = max(0, state.onboard - capacity)
+    if extra > 0:
+        advisory = (
+            f"⚠️ Over-capacity notice: {extra} extra standing passenger(s) onboard beyond capacity ({capacity}). "
+            f"Note: BusCrowd provides crowd visibility to assist your personal travel decision — boarding remains 100% your choice based on personal comfort."
+        )
+    else:
+        advisory = "Note: BusCrowd provides crowd visibility to assist your decision — boarding remains 100% your choice based on personal comfort."
+
     return LiveStatusOut(
-        bus_id     = bus_id,
-        route_id   = meta.get("route_id", "BMTC-500D"),
-        trip_id    = meta.get("trip_id", f"TRIP-LIVE-{datetime.now().strftime('%H%M')}"),
-        onboard    = state.onboard,
-        capacity   = capacity,
-        seats_free = state.seats_free,
-        load_ratio = state.load_ratio,
-        crowd_band = state.band.value,
+        bus_id           = bus_id,
+        route_id         = meta.get("route_id", "BMTC-500D"),
+        trip_id          = meta.get("trip_id", f"TRIP-LIVE-{datetime.now().strftime('%H%M')}"),
+        onboard          = state.onboard,
+        capacity         = capacity,
+        seats_free       = state.seats_free,
+        extra_passengers = extra,
+        load_ratio       = state.load_ratio,
+        crowd_band       = state.band.value,
+        comfort_advisory = advisory,
     )
 
 

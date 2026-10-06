@@ -35,14 +35,16 @@ class TicketOut(BaseModel):
     crowd_band:   str
 
 class LiveStatusOut(BaseModel):
-    bus_id:      str
-    route_id:    str
-    trip_id:     str
-    onboard:     int
-    capacity:    int
-    seats_free:  int
-    load_ratio:  float
-    crowd_band:  str
+    bus_id:           str
+    route_id:         str
+    trip_id:          str
+    onboard:          int
+    capacity:         int
+    seats_free:       int
+    extra_passengers: int = 0
+    load_ratio:       float
+    crowd_band:       str
+    comfort_advisory: str = "Boarding decisions rest entirely on your personal travel comfort."
 
 class PredictOut(BaseModel):
     route_id:    str

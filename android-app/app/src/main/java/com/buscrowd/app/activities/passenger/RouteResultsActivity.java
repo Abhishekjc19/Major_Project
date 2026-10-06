@@ -43,7 +43,7 @@ public class RouteResultsActivity extends AppCompatActivity {
     private int fromSeq, toSeq;
     private String routeId, fromName, toName;
 
-    private TextView tvLiveOnboard, tvLiveSeats, tvLiveBand, tvLiveStatus, tvRecommendationAdvice, tvLastUpdated;
+    private TextView tvLiveOnboard, tvLiveSeats, tvLiveBand, tvLiveStatus, tvRecommendationAdvice, tvLastUpdated, tvExtraPassengers;
     private ProgressBar pbLive, pbLoading;
     private Button btnEnableNotification;
     private RecyclerView rvForecast;
@@ -76,6 +76,7 @@ public class RouteResultsActivity extends AppCompatActivity {
         tvLiveBand            = findViewById(R.id.tv_live_band);
         tvLiveStatus          = findViewById(R.id.tv_live_status);
         tvLastUpdated         = findViewById(R.id.tv_last_updated);
+        tvExtraPassengers     = findViewById(R.id.tv_extra_passengers);
         tvRecommendationAdvice= findViewById(R.id.tv_recommendation_advice);
         btnEnableNotification = findViewById(R.id.btn_enable_notification);
         pbLive                = findViewById(R.id.pb_live_meter);
@@ -105,7 +106,8 @@ public class RouteResultsActivity extends AppCompatActivity {
                                    @NonNull Response<LiveBusState> resp) {
                 if (resp.isSuccessful() && resp.body() != null) {
                     LiveBusState s = resp.body();
-                    runOnUiThread(() -> updateLiveUi(s.onboard, s.seatsFree, s.loadRatio, s.crowdBand, true));
+                    int extra = s.extraPassengers > 0 ? s.extraPassengers : Math.max(0, s.onboard - (s.capacity > 0 ? s.capacity : 50));
+                    runOnUiThread(() -> updateLiveUi(s.onboard, s.seatsFree, extra, s.loadRatio, s.crowdBand, true));
                 } else {
                     runOnUiThread(() -> showFallbackLiveStatus());
                 }
@@ -116,12 +118,22 @@ public class RouteResultsActivity extends AppCompatActivity {
         });
     }
 
-    private void updateLiveUi(int onboard, int seatsFree, double loadRatio, String crowdBand, boolean isLive) {
+    private void updateLiveUi(int onboard, int seatsFree, int extraPassengers, double loadRatio, String crowdBand, boolean isLive) {
         int loadPct = (int) Math.round(loadRatio * 100);
         tvLiveOnboard.setText(String.valueOf(onboard));
         tvLiveSeats.setText(String.valueOf(seatsFree));
         tvLiveBand.setText(CrowdUtils.crowdLabel(crowdBand) + " (" + loadPct + "% full)");
         tvLiveBand.setTextColor(CrowdUtils.crowdColor(this, crowdBand));
+
+        if (tvExtraPassengers != null) {
+            if (extraPassengers > 0 || onboard > 50) {
+                int extra = extraPassengers > 0 ? extraPassengers : (onboard - 50);
+                tvExtraPassengers.setVisibility(View.VISIBLE);
+                tvExtraPassengers.setText("⚠️ Over-Capacity Notice: +" + extra + " Extra Standing Passenger(s) Onboard beyond capacity (50 seats). Boarding is entirely your choice based on personal travel comfort.");
+            } else {
+                tvExtraPassengers.setVisibility(View.GONE);
+            }
+        }
 
         String timeFormatted = new SimpleDateFormat("hh:mm:ss a", Locale.US).format(new Date());
         if (tvLastUpdated != null) {
@@ -143,10 +155,11 @@ public class RouteResultsActivity extends AppCompatActivity {
         int onboard = isPeak ? 34 : 12;
         int capacity = 50;
         int seatsFree = Math.max(0, capacity - onboard);
+        int extra = Math.max(0, onboard - capacity);
         double loadRatio = (double) onboard / capacity;
         String crowdBand = isPeak ? "Few seats left" : "Plenty of seats";
 
-        updateLiveUi(onboard, seatsFree, loadRatio, crowdBand, false);
+        updateLiveUi(onboard, seatsFree, extra, loadRatio, crowdBand, false);
     }
 
     private void loadForecast() {

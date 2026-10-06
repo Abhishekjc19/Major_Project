@@ -22,11 +22,17 @@ public class LiveBusState {
     @SerializedName("seats_free")
     public int seatsFree;
 
+    @SerializedName("extra_passengers")
+    public int extraPassengers;
+
     @SerializedName("load_ratio")
     public double loadRatio;
 
     @SerializedName("crowd_band")
     public String crowdBand;
+
+    @SerializedName("comfort_advisory")
+    public String comfortAdvisory;
 
     public LiveBusState() {}
 }
