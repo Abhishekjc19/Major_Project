@@ -53,13 +53,23 @@ public class StorageService {
 
     public static List<String> getSavedRoutes(Context ctx) {
         String json = prefs(ctx).getString(AppConfig.KEY_SAVED_ROUTES, null);
-        if (json == null) return new ArrayList<>(Arrays.asList("ROUTE-1"));
+        if (json == null) return new ArrayList<>(Arrays.asList("BMTC-500D"));
         Type type = new TypeToken<List<String>>() {}.getType();
         return new Gson().fromJson(json, type);
     }
 
     public static void setSavedRoutes(Context ctx, List<String> routes) {
         prefs(ctx).edit().putString(AppConfig.KEY_SAVED_ROUTES, new Gson().toJson(routes)).apply();
+    }
+
+    // ── Shared Live Bus State (Syncs Passenger & Conductor Screens) ────────────
+
+    public static int getLiveOnboard(Context ctx, String busId) {
+        return prefs(ctx).getInt("live_onboard_" + busId, 0);
+    }
+
+    public static void setLiveOnboard(Context ctx, String busId, int onboard) {
+        prefs(ctx).edit().putInt("live_onboard_" + busId, Math.max(0, onboard)).apply();
     }
 
     // ── Offline Ticket Queue ───────────────────────────────────────────────────

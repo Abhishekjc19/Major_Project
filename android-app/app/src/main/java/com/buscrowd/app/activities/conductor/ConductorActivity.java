@@ -204,6 +204,7 @@ public class ConductorActivity extends AppCompatActivity {
     }
 
     private void updateHud() {
+        StorageService.setLiveOnboard(this, BUS_ID, liveOnboard);
         tvOnboard.setText(String.valueOf(liveOnboard));
         tvSeatsFree.setText(String.valueOf(seatsFree));
         tvCrowdBand.setText(CrowdUtils.crowdLabel(crowdBand));

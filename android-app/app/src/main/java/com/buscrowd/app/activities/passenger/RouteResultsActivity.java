@@ -24,6 +24,7 @@ import com.buscrowd.app.models.LiveBusState;
 import com.buscrowd.app.models.PredictedCrowd;
 import com.buscrowd.app.models.RecommendationResult;
 import com.buscrowd.app.services.ApiClient;
+import com.buscrowd.app.services.StorageService;
 import com.buscrowd.app.utils.CrowdUtils;
 
 import java.text.SimpleDateFormat;
@@ -106,6 +107,7 @@ public class RouteResultsActivity extends AppCompatActivity {
                                    @NonNull Response<LiveBusState> resp) {
                 if (resp.isSuccessful() && resp.body() != null) {
                     LiveBusState s = resp.body();
+                    StorageService.setLiveOnboard(RouteResultsActivity.this, "BUS-01", s.onboard);
                     int extra = s.extraPassengers > 0 ? s.extraPassengers : Math.max(0, s.onboard - (s.capacity > 0 ? s.capacity : 50));
                     runOnUiThread(() -> updateLiveUi(s.onboard, s.seatsFree, extra, s.loadRatio, s.crowdBand, true));
                 } else {
@@ -150,14 +152,12 @@ public class RouteResultsActivity extends AppCompatActivity {
     }
 
     private void showFallbackLiveStatus() {
-        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        boolean isPeak = (hour >= 8 && hour <= 10) || (hour >= 17 && hour <= 19);
-        int onboard = isPeak ? 34 : 12;
+        int onboard = StorageService.getLiveOnboard(this, "BUS-01");
         int capacity = 50;
         int seatsFree = Math.max(0, capacity - onboard);
         int extra = Math.max(0, onboard - capacity);
         double loadRatio = (double) onboard / capacity;
-        String crowdBand = isPeak ? "Few seats left" : "Plenty of seats";
+        String crowdBand = loadRatio > 0.6 ? "Few seats left" : "Plenty of seats";
 
         updateLiveUi(onboard, seatsFree, extra, loadRatio, crowdBand, false);
     }
